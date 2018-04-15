@@ -1,8 +1,6 @@
 package com.tx.demo;
 
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
+import org.quartz.*;
 
 /**
  * Created by peter.
@@ -12,6 +10,13 @@ public class HelloJob implements Job {
     }
 
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        System.err.println("Hello!  HelloJob is executing.");
+        JobKey key = jobExecutionContext.getJobDetail().getKey();
+
+        JobDataMap dataMap = jobExecutionContext.getJobDetail().getJobDataMap();
+
+        String jobSays = dataMap.getString("jobSays");
+        float myFloatValue = dataMap.getFloat("myFloatValue");
+
+        System.err.println("Instance " + key + " of HelloJob says: " + jobSays + ", and val is: " + myFloatValue);
     }
 }

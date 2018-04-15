@@ -1,6 +1,10 @@
 package com.tx.demo;
 
-import org.quartz.*;
+import org.junit.Test;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerFactory;
+import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
 
 import static org.quartz.JobBuilder.newJob;
@@ -10,8 +14,10 @@ import static org.quartz.TriggerBuilder.newTrigger;
 /**
  * Created by peter.
  */
-public class Main {
-    public static void main(String[] args) throws SchedulerException {
+public class HelloJobTest {
+
+    @Test
+    public void execute() throws Exception {
         SchedulerFactory schedFact = new StdSchedulerFactory();
         Scheduler sched = schedFact.getScheduler();
         sched.start();
@@ -28,11 +34,14 @@ public class Main {
                 .withIdentity("myTrigger", "group1")
                 .startNow()
                 .withSchedule(simpleSchedule()
-                        .withIntervalInSeconds(40)
+                        .withIntervalInSeconds(2)
                         .repeatForever())
                 .build();
 
         //Tell quartz to schedule the job using our trigger
         sched.scheduleJob(job, trigger);
+
+        Thread.currentThread().join(10 * 1000);
     }
+
 }
